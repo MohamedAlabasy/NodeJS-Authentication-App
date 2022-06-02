@@ -1,6 +1,6 @@
 const express = require('express');
 const router = require('./Routers/AuthRouter');
-
+const body_parser = require('body-parser');
 const PORT = 8050;
 const app = express();
 
@@ -9,6 +9,8 @@ app.listen(process.env.PORT || PORT, () => {
     console.log(`App Run at http://localhost:${PORT}`);
 });
 
+
+
 // middleware to get method and url
 app.use((request, response, next) => {
     console.log(request.method, request.url);
@@ -16,6 +18,9 @@ app.use((request, response, next) => {
 })
 
 
+
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({ extended: false }));
 app.use('', router);
 
 
