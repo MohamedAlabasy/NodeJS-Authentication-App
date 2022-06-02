@@ -1,8 +1,8 @@
 <h1 align="center"> NodeJS Authentication App </h1>
 
-<p align="center">
+<!-- <p align="center">
 <img src="https://user-images.githubusercontent.com/93389016/171141722-2858b7ab-086b-4c93-ba02-589ea5d73697.png">  
-</p>
+</p> -->
 
 ## To run this project :   
 
