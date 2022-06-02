@@ -5,7 +5,6 @@ const Auth = require('../Models/AuthSchema')
 const controller = require('../Controllers/AuthController');
 const { query, body, param } = require('express-validator');
 
-
 // #=======================================================================================#
 // #			                            login                                          #
 // #=======================================================================================#

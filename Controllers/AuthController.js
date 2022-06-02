@@ -7,7 +7,7 @@ const { validate } = require('../Utils/validate')
 // #=======================================================================================#
 exports.login = (request, response, next) => {
     validate(request)
-    Auth.findOne({ email: request.body.email })
+    Auth.findOne({ email: request.body.email }).select('+password')
         .then((data) => {
             if (data == null) {
                 throw new Error(`No user with this id = ${request.body.id}`)
@@ -18,7 +18,12 @@ exports.login = (request, response, next) => {
                 } else {
                     response.status(200).json({
                         status: 1,
-                        data: data,
+                        data: {
+                            _id: data._id,
+                            name: data.name,
+                            email: data.email,
+                            gender: data.gender,
+                        },
                     });
                 }
             }
@@ -43,7 +48,12 @@ exports.register = (request, response, next) => {
         .then((data) => {
             response.status(200).json({
                 status: 1,
-                data: data,
+                data: {
+                    _id: data._id,
+                    name: data.name,
+                    email: data.email,
+                    gender: data.gender,
+                },
             })
         })
         .catch((error) => {
@@ -55,7 +65,7 @@ exports.register = (request, response, next) => {
 // #=======================================================================================#
 exports.getUserData = (request, response, next) => {
     validate(request)
-    Auth.findById(request.body.id)
+    Auth.findById(request.body.id).select('-createdAt -updatedAt -__v')
         .then((data) => {
             if (data == null) {
                 throw new Error(`No user with this id = ${request.body.id}`)
@@ -75,7 +85,7 @@ exports.getUserData = (request, response, next) => {
 // #=======================================================================================#
 exports.getAllUsersData = (request, response, next) => {
     validate(request)
-    Auth.find({})
+    Auth.find({}).select('-createdAt -updatedAt -__v')
         .then(data => {
             if (data == null) {
                 throw new Error('No user to show')
