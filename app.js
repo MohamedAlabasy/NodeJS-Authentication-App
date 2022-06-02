@@ -1,5 +1,5 @@
 const express = require('express');
-
+const router = require('./Routers/AuthRouter');
 
 const PORT = 8050;
 const app = express();
@@ -15,17 +15,8 @@ app.use((request, response, next) => {
     next();
 })
 
-let flag = true
-app.use((request, response, next) => {
-    if (flag) {
-        console.log('aut');
-        next()
-    } else {
-        console.log('not auth');
-        next(new Error('Not Aut'))
-    }
-    // flag = !flag
-})
+
+app.use('', router);
 
 
 // middleware not Found

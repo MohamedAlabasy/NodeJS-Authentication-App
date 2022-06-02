@@ -5,16 +5,22 @@ exports.login = (request, response, next) => {
     })
 }
 
-exports.singUp = (request, response, next) => {
+exports.register = (request, response, next) => {
     response.status(200).json({
         status: 1,
-        data: 'singUp',
+        data: 'register',
+    })
+}
+exports.getUserData = (request, response, next) => {
+    response.status(200).json({
+        status: 1,
+        data: 'get User Data',
     })
 }
 
 exports.lgoOut = (request, response, next) => {
     response.status(200).json({
         status: 1,
-        data: 'lgoOut',
+        data: 'lgo out',
     })
 }
