@@ -1,10 +1,22 @@
 const express = require('express');
 const router = express.Router();
+
 const Auth = require('../Models/AuthSchema')
 const controller = require('../Controllers/AuthController');
 const { query, body, param } = require('express-validator');
 
-router.post('/login', controller.login);
+
+// #=======================================================================================#
+// #			                            login                                          #
+// #=======================================================================================#
+router.post('/login', [
+    body('email').isEmail().withMessage('invalid email'),
+], controller.login);
+
+
+// #=======================================================================================#
+// #			                            Register                                       #
+// #=======================================================================================#
 router.post('/register', [
     body('name').isAlpha().withMessage('invalid name'),
     body('email').isEmail().withMessage('invalid email')
@@ -18,9 +30,29 @@ router.post('/register', [
     body('password').isStrongPassword().withMessage('Password Must contain at least 1 characters(upper and lower),numbers,special characters'),
     body('gender').isIn(['male', 'female']).withMessage("gender must be male or female"),
 ], controller.register);
-router.get('/user', controller.getUserData);
+
+// #=======================================================================================#
+// #			                       get User by id                                      #
+// #=======================================================================================#
+router.get('/user', [
+    body('id').isInt().withMessage('invalid id'),
+], controller.getUserData);
+
+// #=======================================================================================#
+// #			                         get All Users                                     #
+// #=======================================================================================#
 router.get('', controller.getAllUsersData);
-router.delete('', controller.deleteUser);
+
+// #=======================================================================================#
+// #			                          delete User                                      #
+// #=======================================================================================#
+router.delete('', [
+    body('id').isInt().withMessage('invalid id'),
+], controller.deleteUser);
+
+// #=======================================================================================#
+// #			                            lgoOut                                         #
+// #=======================================================================================#
 router.post('/logout', controller.lgoOut);
 
 
