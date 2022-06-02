@@ -1,13 +1,17 @@
 const bcrypt = require('bcryptjs');
 const Auth = require('../Models/AuthSchema');
-
+// #=======================================================================================#
+// #			                            login                                          #
+// #=======================================================================================#
 exports.login = (request, response, next) => {
     response.status(200).json({
         status: 1,
         data: 'login',
     })
 }
-
+// #=======================================================================================#
+// #			                            Register                                       #
+// #=======================================================================================#
 exports.register = (request, response, next) => {
     let hash = bcrypt.hashSync(request.body.password, 10);
     let user = new Auth({
@@ -27,15 +31,29 @@ exports.register = (request, response, next) => {
             next(error)
         })
 }
-
+// #=======================================================================================#
+// #			                       get User by id                                      #
+// #=======================================================================================#
 exports.getUserData = (request, response, next) => {
-    Auth.findById(request.body.id);
-    response.status(200).json({
-        status: 1,
-        data: 'get User Data',
-    })
-}
+    Auth.findById(request.body.id)
+        .then((data) => {
+            if (data == null) {
+                throw new Error(`No user with this id = ${request.body.id}`)
+            } else {
+                response.status(200).json({
+                    status: 1,
+                    data: data,
+                });
+            }
+        })
+        .catch((error) => {
+            next(error);
+        })
 
+}
+// #=======================================================================================#
+// #			                         get All Users                                     #
+// #=======================================================================================#
 exports.getAllUsersData = (request, response, next) => {
     Auth.find({})
         .then(data => {
@@ -51,7 +69,9 @@ exports.getAllUsersData = (request, response, next) => {
             next(error);
         })
 }
-
+// #=======================================================================================#
+// #			                            lgoOut                                         #
+// #=======================================================================================#
 exports.lgoOut = (request, response, next) => {
     response.status(200).json({
         status: 1,
