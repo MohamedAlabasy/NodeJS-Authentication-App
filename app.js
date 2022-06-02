@@ -1,22 +1,28 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const router = require('./Routers/AuthRouter');
 const body_parser = require('body-parser');
 
 const PORT = 8050;
 const app = express();
 
-// run server
-app.listen(process.env.PORT || PORT, () => {
-    console.log(`App Run at http://localhost:${PORT}`);
-});
-
+mongoose.connect('mongodb://localhost:27017/auth_JWT')
+    .then((data) => {
+        console.log('DB connected ... ');
+        // run server
+        app.listen(process.env.PORT || PORT, () => {
+            console.log(`App Run at http://localhost:${PORT}`);
+        });
+    }).catch((error) => {
+        console.log('DB not connected', error + '');
+    })
 
 // middleware to get method and url
 app.use((request, response, next) => {
     console.log(request.method, request.url);
     next();
 })
-
 
 //to add header or use cors
 app.use((request, response, next) => {

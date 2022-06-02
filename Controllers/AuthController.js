@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-
 const Auth = require('../Models/AuthSchema');
 
 exports.login = (request, response, next) => {
@@ -28,6 +27,7 @@ exports.register = (request, response, next) => {
             next(error)
         })
 }
+
 exports.getUserData = (request, response, next) => {
     Auth.findById(request.body.id);
     response.status(200).json({
@@ -50,7 +50,6 @@ exports.getAllUsersData = (request, response, next) => {
         }).catch(error => {
             next(error);
         })
-
 }
 
 exports.lgoOut = (request, response, next) => {
