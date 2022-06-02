@@ -1,9 +1,12 @@
 const bcrypt = require('bcryptjs');
+
 const Auth = require('../Models/AuthSchema');
+const { validate } = require('../Utils/validate')
 // #=======================================================================================#
 // #			                            login                                          #
 // #=======================================================================================#
 exports.login = (request, response, next) => {
+    validate(request)
     Auth.findOne({ email: request.body.email })
         .then((data) => {
             if (data == null) {
@@ -28,6 +31,7 @@ exports.login = (request, response, next) => {
 // #			                            Register                                       #
 // #=======================================================================================#
 exports.register = (request, response, next) => {
+    validate(request)
     let hash = bcrypt.hashSync(request.body.password, 10);
     let user = new Auth({
         name: request.body.name,
@@ -50,6 +54,7 @@ exports.register = (request, response, next) => {
 // #			                       get User by id                                      #
 // #=======================================================================================#
 exports.getUserData = (request, response, next) => {
+    validate(request)
     Auth.findById(request.body.id)
         .then((data) => {
             if (data == null) {
@@ -69,6 +74,7 @@ exports.getUserData = (request, response, next) => {
 // #			                         get All Users                                     #
 // #=======================================================================================#
 exports.getAllUsersData = (request, response, next) => {
+    validate(request)
     Auth.find({})
         .then(data => {
             if (data == null) {
@@ -87,6 +93,7 @@ exports.getAllUsersData = (request, response, next) => {
 // #			                            lgoOut                                         #
 // #=======================================================================================#
 exports.lgoOut = (request, response, next) => {
+    validate(request)
     response.status(200).json({
         status: 1,
         data: 'lgo out',
@@ -96,6 +103,7 @@ exports.lgoOut = (request, response, next) => {
 // #			                          delete User                                      #
 // #=======================================================================================#
 exports.deleteUser = (request, response, next) => {
+    validate(request)
     Auth.findByIdAndDelete(request.body.id)
         .then((data) => {
             if (data == null) {
