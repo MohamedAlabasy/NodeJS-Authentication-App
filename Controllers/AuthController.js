@@ -4,10 +4,25 @@ const Auth = require('../Models/AuthSchema');
 // #			                            login                                          #
 // #=======================================================================================#
 exports.login = (request, response, next) => {
-    response.status(200).json({
-        status: 1,
-        data: 'login',
-    })
+    Auth.findOne({ email: request.body.email })
+        .then((data) => {
+            if (data == null) {
+                throw new Error(`No user with this id = ${request.body.id}`)
+            } else {
+                let passwordIsValid = bcrypt.compareSync(request.body.password, data.password)
+                if (!passwordIsValid) {
+                    throw new Error(`invalid password`)
+                } else {
+                    response.status(200).json({
+                        status: 1,
+                        data: data,
+                    });
+                }
+            }
+        })
+        .catch((error) => {
+            next(error);
+        })
 }
 // #=======================================================================================#
 // #			                            Register                                       #
@@ -49,7 +64,6 @@ exports.getUserData = (request, response, next) => {
         .catch((error) => {
             next(error);
         })
-
 }
 // #=======================================================================================#
 // #			                         get All Users                                     #
@@ -77,4 +91,24 @@ exports.lgoOut = (request, response, next) => {
         status: 1,
         data: 'lgo out',
     })
+}
+// #=======================================================================================#
+// #			                          delete User                                      #
+// #=======================================================================================#
+exports.deleteUser = (request, response, next) => {
+    Auth.findByIdAndDelete(request.body.id)
+        .then((data) => {
+            if (data == null) {
+                throw new Error(`No user with this id = ${request.body.id}`)
+            } else {
+                data.deleteUser
+                response.status(200).json({
+                    status: 1,
+                    message: 'deleted successfully',
+                });
+            }
+        })
+        .catch((error) => {
+            next(error);
+        })
 }

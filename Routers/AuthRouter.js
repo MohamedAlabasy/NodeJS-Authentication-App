@@ -7,6 +7,7 @@ router.post('/login', controller.login);
 router.post('/register', controller.register);
 router.get('/user', controller.getUserData);
 router.get('', controller.getAllUsersData);
+router.delete('', controller.deleteUser);
 router.post('/logout', controller.lgoOut);
 
 
