@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const auto_increment = require('@typegoose/auto-increment');
 
 // 1- build schema with validation
 const schema = new mongoose.Schema({
@@ -9,6 +9,8 @@ const schema = new mongoose.Schema({
     password: { type: String, required: true },
     gender: { type: String, enum: ['male', 'female'], default: 'male' },
 }, { timestamps: true });
+
+schema.plugin(auto_increment, [{ field: '_id' }])
 
 // Register for schema in mongoose
 module.exports = mongoose.model('users', schema);
