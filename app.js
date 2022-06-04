@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const body_parser = require('body-parser');
+const jsonwebtoken = require('jsonwebtoken');
 
 const router = require('./Routers/AuthRouter');
 
