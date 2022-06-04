@@ -5,7 +5,8 @@ const body_parser = require('body-parser');
 
 const router = require('./Routers/AuthRouter');
 
-const PORT = 8050;
+require('dotenv').config();
+const PORT = process.env.PORT || 8050;
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/auth_JWT')
