@@ -18,7 +18,7 @@ router.post('/login', [
 // #=======================================================================================#
 // #			                            Register                                       #
 // #=======================================================================================#
-router.post('/register', checkTokens, [
+router.post('/register', [
     body('name').isAlpha().withMessage('invalid name'),
     body('email').isEmail().withMessage('invalid email')
         .custom((value) => {

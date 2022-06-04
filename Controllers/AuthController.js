@@ -10,8 +10,8 @@ exports.login = (request, response, next) => {
     validate(request)
     Auth.findOne({ email: request.body.email }).select('+password +token')
         .then((data) => {
-            if (data.length === 0) {
-                throw new Error(`No user with this id = ${request.body.id}`)
+            if (data === null) {
+                throw new Error(`No user with this email = ${request.body.email}`)
             } else {
                 let passwordIsValid = bcrypt.compareSync(request.body.password, data.password)
                 if (!passwordIsValid) {
@@ -26,7 +26,7 @@ exports.login = (request, response, next) => {
                         response.status(200).json({
                             status: 1,
                             data: {
-                                _id: data._id,
+                                id: data._id,
                                 token: data.token,
                                 name: data.name,
                                 email: data.email,
@@ -60,7 +60,7 @@ exports.register = (request, response, next) => {
             response.status(200).json({
                 status: 1,
                 data: {
-                    _id: data._id,
+                    id: data._id,
                     name: data.name,
                     email: data.email,
                     gender: data.gender,
