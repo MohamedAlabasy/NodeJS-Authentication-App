@@ -9,7 +9,7 @@
 
 `Step 1` :  Download the source code .
 ```
-git https://github.com/MohamedAlabasy/NodeJS-Authentication-App.git
+git clone https://github.com/MohamedAlabasy/NodeJS-Authentication-App.git
 ```
 
 `Step 2` :  Enter the project file then install package
