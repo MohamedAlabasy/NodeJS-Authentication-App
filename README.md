@@ -21,5 +21,5 @@ nodemon app.js
 ```
 or
 ```
-npm mon
+npm run mon
 ```
