@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { AutoIncrementID } = require('@typegoose/auto-increment');
 
+
 // 1- build schema with validation
 const schema = new mongoose.Schema({
     _id: Number,//,mongoose.Types.object
@@ -12,5 +13,6 @@ const schema = new mongoose.Schema({
 }, { timestamps: true });
 
 schema.plugin(AutoIncrementID, [{ field: '_id' }]);
+
 // Register for schema in mongoose
 module.exports = mongoose.model('users', schema);

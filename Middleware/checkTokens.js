@@ -1,6 +1,8 @@
 
 const jwt = require('jsonwebtoken');
 
+
+
 const checkTokens = (request, response, next) => {
     const authHeader = request.headers["authorization"] || request.body.token || request.query.token;
     const token = authHeader && authHeader.split(' ')[1]; //to get token without Bearer

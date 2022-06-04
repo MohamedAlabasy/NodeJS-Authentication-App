@@ -6,6 +6,7 @@ const controller = require('../Controllers/AuthController');
 const checkTokens = require('../Middleware/checkTokens');
 
 const router = express.Router();
+
 // #=======================================================================================#
 // #			                            login                                          #
 // #=======================================================================================#
