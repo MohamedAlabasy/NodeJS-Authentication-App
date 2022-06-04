@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const body_parser = require('body-parser');
 
 const router = require('./Routers/AuthRouter');
-const body_parser = require('body-parser');
 
 const PORT = 8050;
 const app = express();
