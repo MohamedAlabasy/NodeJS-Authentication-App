@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, select: false },
     gender: { type: String, enum: ['male', 'female'], default: 'male' },
+    token: { type: String, required: false, default: null, select: false },
 }, { timestamps: true });
 
 schema.plugin(AutoIncrementID, [{ field: '_id' }]);

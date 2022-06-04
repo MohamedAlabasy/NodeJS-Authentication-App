@@ -5,15 +5,14 @@ const body_parser = require('body-parser');
 const router = require('./Routers/AuthRouter');
 
 require('dotenv').config();
-const PORT = process.env.PORT || 8050;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/auth_JWT')
+mongoose.connect(process.env.MONGO_DB)
     .then((data) => {
         console.log('DB connected ... ');
         // run server
         app.listen(process.env.PORT || PORT, () => {
-            console.log(`App Run at http://localhost:${PORT}`);
+            console.log(`App Run at http://${process.env.HOST}:${process.env.PORT || 8050}`);
         });
     }).catch((error) => {
         console.log('DB not connected', error + '');

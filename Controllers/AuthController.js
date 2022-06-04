@@ -8,7 +8,7 @@ const { validate } = require('../Utils/validate')
 // #=======================================================================================#
 exports.login = (request, response, next) => {
     validate(request)
-    Auth.findOne({ email: request.body.email }).select('+password')
+    Auth.findOne({ email: request.body.email }).select('+password +token')
         .then((data) => {
             if (data.length === 0) {
                 throw new Error(`No user with this id = ${request.body.id}`)
@@ -21,16 +21,21 @@ exports.login = (request, response, next) => {
                     const accessToken = jwt.sign({ id: data._id, email: data.email }, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: 86400 //for 24 hour
                     });
-                    response.status(200).json({
-                        status: 1,
-                        data: {
-                            _id: data._id,
-                            token: accessToken,
-                            name: data.name,
-                            email: data.email,
-                            gender: data.gender,
-                        },
-                    });
+                    // add token to db
+                    Auth.findOneAndUpdate({ token: accessToken }).then(() => {
+                        response.status(200).json({
+                            status: 1,
+                            data: {
+                                _id: data._id,
+                                token: data.token,
+                                name: data.name,
+                                email: data.email,
+                                gender: data.gender,
+                            },
+                        });
+                    }).catch(error => {
+                        next(error);
+                    })
                 }
             }
         })
@@ -133,8 +138,12 @@ exports.deleteUser = (request, response, next) => {
 // #=======================================================================================#
 exports.lgoOut = (request, response, next) => {
     validate(request)
-    response.status(200).json({
-        status: 1,
-        data: 'lgo out',
+    Auth.findOneAndUpdate({ token: null }).then(() => {
+        response.status(200).json({
+            status: 1,
+            data: 'logout successful',
+        })
+    }).catch(error => {
+        next(error);
     })
 }
