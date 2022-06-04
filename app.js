@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
 const body_parser = require('body-parser');
 
@@ -18,12 +19,12 @@ mongoose.connect('mongodb://localhost:27017/auth_JWT')
         console.log('DB not connected', error + '');
     })
 
-// middleware to get method and url
-app.use((request, response, next) => {
-    console.log(request.method, request.url);
-    next();
-})
-
+// // middleware to get method and url
+// app.use((request, response, next) => {
+//     console.log(request.method, request.url);
+//     next();
+// })
+app.use(morgan('tiny'));
 //to add header or use cors
 app.use((request, response, next) => {
     response.header("Access-Control-Allow-Origin", "*");//alow to any web side to connect to my server
