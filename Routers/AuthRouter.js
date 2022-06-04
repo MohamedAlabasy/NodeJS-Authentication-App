@@ -1,14 +1,16 @@
 const express = require('express');
-const router = express.Router();
+const { query, body, param } = require('express-validator');
 
 const Auth = require('../Models/AuthSchema')
 const controller = require('../Controllers/AuthController');
-const { query, body, param } = require('express-validator');
+const checkTokens = require('../Middleware/checkTokens');
 
+const router = express.Router();
 // #=======================================================================================#
 // #			                            login                                          #
 // #=======================================================================================#
 router.post('/login', [
+    body('email').isLength({ min: 0 }).withMessage('must enter email'),
     body('email').isEmail().withMessage('invalid email'),
 ], controller.login);
 
@@ -16,7 +18,7 @@ router.post('/login', [
 // #=======================================================================================#
 // #			                            Register                                       #
 // #=======================================================================================#
-router.post('/register', [
+router.post('/register', checkTokens, [
     body('name').isAlpha().withMessage('invalid name'),
     body('email').isEmail().withMessage('invalid email')
         .custom((value) => {
@@ -33,26 +35,26 @@ router.post('/register', [
 // #=======================================================================================#
 // #			                       get User by id                                      #
 // #=======================================================================================#
-router.get('/user', [
+router.get('/user', checkTokens, [
     body('id').isInt().withMessage('invalid id'),
 ], controller.getUserData);
 
 // #=======================================================================================#
 // #			                         get All Users                                     #
 // #=======================================================================================#
-router.get('', controller.getAllUsersData);
+router.get('', checkTokens, controller.getAllUsersData);
 
 // #=======================================================================================#
 // #			                          delete User                                      #
 // #=======================================================================================#
-router.delete('', [
+router.delete('', checkTokens, [
     body('id').isInt().withMessage('invalid id'),
 ], controller.deleteUser);
 
 // #=======================================================================================#
 // #			                            lgoOut                                         #
 // #=======================================================================================#
-router.post('/logout', controller.lgoOut);
+router.post('/logout', checkTokens, controller.lgoOut);
 
 
 module.exports = router;

@@ -2,8 +2,6 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const body_parser = require('body-parser');
-const jwt = require('jsonwebtoken');
-
 const router = require('./Routers/AuthRouter');
 
 require('dotenv').config();
@@ -28,6 +26,7 @@ mongoose.connect('mongodb://localhost:27017/auth_JWT')
 // })
 app.use(morgan('tiny'));
 //to add header or use cors
+
 app.use((request, response, next) => {
     response.header("Access-Control-Allow-Origin", "*");//alow to any web side to connect to my server
     response.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); //for routs
@@ -37,6 +36,7 @@ app.use((request, response, next) => {
 
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: false }));
+// app.use(checkTokens);
 app.use('', router);
 
 // middleware not Found
@@ -52,7 +52,7 @@ app.use((error, request, response, next) => {
     let status = error.status || 500;
     response.status(status).json({
         status: 0,
-        error: error + ''
+        error: error.message + ''
     })
 })
 

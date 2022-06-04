@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const Auth = require('../Models/AuthSchema');
 const { validate } = require('../Utils/validate')
@@ -9,17 +10,22 @@ exports.login = (request, response, next) => {
     validate(request)
     Auth.findOne({ email: request.body.email }).select('+password')
         .then((data) => {
-            if (data == null) {
+            if (data.length === 0) {
                 throw new Error(`No user with this id = ${request.body.id}`)
             } else {
                 let passwordIsValid = bcrypt.compareSync(request.body.password, data.password)
                 if (!passwordIsValid) {
                     throw new Error(`invalid password`)
                 } else {
+                    // to add token to router
+                    const accessToken = jwt.sign({ id: data._id, email: data.email }, process.env.ACCESS_TOKEN_SECRET, {
+                        expiresIn: 86400 //for 24 hour
+                    });
                     response.status(200).json({
                         status: 1,
                         data: {
                             _id: data._id,
+                            token: accessToken,
                             name: data.name,
                             email: data.email,
                             gender: data.gender,
@@ -67,7 +73,7 @@ exports.getUserData = (request, response, next) => {
     validate(request)
     Auth.findById(request.body.id).select('-createdAt -updatedAt -__v')
         .then((data) => {
-            if (data == null) {
+            if (data.length === 0) {
                 throw new Error(`No user with this id = ${request.body.id}`)
             } else {
                 response.status(200).json({
@@ -87,7 +93,7 @@ exports.getAllUsersData = (request, response, next) => {
     validate(request)
     Auth.find({}).select('-createdAt -updatedAt -__v')
         .then(data => {
-            if (data == null) {
+            if (data.length === 0) {
                 throw new Error('No user to show')
             } else {
                 response.status(200).json({
@@ -107,7 +113,7 @@ exports.deleteUser = (request, response, next) => {
     validate(request)
     Auth.findByIdAndDelete(request.body.id)
         .then((data) => {
-            if (data == null) {
+            if (data.length === 0) {
                 throw new Error(`No user with this id = ${request.body.id}`)
             } else {
                 data.deleteUser
